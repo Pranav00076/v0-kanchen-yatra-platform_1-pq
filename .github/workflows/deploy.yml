@@ -1,0 +1,31 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Deploys when changes are pushed to main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # Use a stable Node version
+
+      # This assumes your project uses npm and a 'build' script in package.json
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build # Runs your project's build command
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4 # A very popular and reliable action
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out # Standard output directory for Next.js/React builds
